@@ -1,0 +1,201 @@
+# Bilibili @dumb_cmd
+
+import flpianoroll as flp
+import math
+
+def createDialog():
+    ppq_notice = "目前 PPQ 为 %d（建议设置较高的 PPQ/BPM 以提高音准）" % flp.score.PPQ
+    form = flp.ScriptDialog(
+        "midi_osc",
+        "灵感来自 death by amen - Virtual Riot\n"
+        "用于生成高频MIDI音符，以模拟振荡器的部分功能\n"
+        "继承大部分的音符属性，支持简单的滑音(Slide)\n"
+        + ppq_notice
+         
+    )
+    form.AddInputKnobInt("速度(BPM)", 120, 1, 522)
+    form.AddInputKnobInt("标准音高(Hz)", 440, 300, 600)
+    form.AddInputKnobInt("移调(八度)", 0, -6, 6)
+    form.AddInputCheckbox("1tick", False)
+    
+    return form
+
+def apply(form):
+    bpm = form.GetInputValue("速度(BPM)") or 120
+    base_freq = form.GetInputValue("标准音高(Hz)") or 440
+    transpose = form.GetInputValue("移调(八度)") or 0
+    one_tick_mode = form.GetInputValue("1tick") or False
+    ppq = flp.score.PPQ
+
+    color_groups = {}
+    for i in range(flp.score.noteCount):
+        note = flp.score.getNote(i)
+        color = getattr(note, 'color', 0)
+
+        if color not in color_groups:
+            color_groups[color] = {'notes': [], 'slides': []}
+
+        if getattr(note, 'slide', False):
+            color_groups[color]['slides'].append(note)
+        else:
+            color_groups[color]['notes'].append(note)
+
+    new_notes = []
+
+    def get_segment_at_pos(segments, pos):
+        for seg in segments:
+            if seg['start'] <= pos < seg['end']:
+                return seg
+        if segments and pos == segments[-1]['end']:
+            return segments[-1]
+        return None
+
+    for color, group in color_groups.items():
+        for note in group['notes']:
+            note_start = note.time
+            note_end = note.time + note.length
+
+            overlapping_slides = []
+            for slide in group['slides']:
+                slide_start = slide.time
+                slide_end = slide.time + slide.length
+                if (note_start <= slide_start < note_end and slide_end > note_start and slide_end > slide_start):
+                    overlap_start = max(note_start, slide_start)
+                    overlap_end = min(note_end, slide_end)
+                    if overlap_end > overlap_start:
+                        overlapping_slides.append({
+                            'slide': slide,
+                            'start': overlap_start,
+                            'end': overlap_end,
+                            'duration': overlap_end - overlap_start
+                        })
+
+            overlapping_slides.sort(key=lambda x: (x['start'], -x['slide'].number))
+
+            current_pitch = calculate_pitch(note, base_freq, transpose)
+            current_velocity = note.velocity
+            current_pan = getattr(note, 'pan', 0.5)
+            current_fcut = getattr(note, 'fcut', 0.5)
+            current_fres = getattr(note, 'fres', 0.5)
+            current_release = getattr(note, 'release', 0.5)
+
+            segments = []
+            last_end = note_start
+
+            for slide_data in overlapping_slides:
+                slide_start = slide_data['start']
+                slide_note = slide_data['slide']
+                if last_end < slide_start:
+                    segments.append({
+                        'start': last_end,
+                        'end': slide_start,
+                        'type': 'fixed',
+                        'pitch': current_pitch,
+                        'velocity': current_velocity,
+                        'pan': current_pan,
+                        'fcut': current_fcut,
+                        'fres': current_fres,
+                        'release': current_release
+                    })
+                target_pitch = calculate_pitch(slide_note, base_freq, transpose)
+                segments.append({
+                    'start': slide_start,
+                    'end': slide_data['end'],
+                    'type': 'slide',
+                    'start_pitch': current_pitch,
+                    'end_pitch': target_pitch,
+                    'start_velocity': current_velocity,
+                    'end_velocity': slide_note.velocity,
+                    'start_pan': current_pan,
+                    'end_pan': getattr(slide_note, 'pan', 0.5),
+                    'start_fcut': current_fcut,
+                    'end_fcut': getattr(slide_note, 'fcut', 0.5),
+                    'start_fres': current_fres,
+                    'end_fres': getattr(slide_note, 'fres', 0.5),
+                    'start_release': current_release,
+                    'end_release': getattr(slide_note, 'release', 0.5)
+                })
+                current_pitch = target_pitch
+                current_velocity = slide_note.velocity
+                current_pan = getattr(slide_note, 'pan', 0.5)
+                current_fcut = getattr(slide_note, 'fcut', 0.5)
+                current_fres = getattr(slide_note, 'fres', 0.5)
+                current_release = getattr(slide_note, 'release', 0.5)
+                last_end = slide_data['end']
+
+            if last_end < note_end:
+                segments.append({
+                    'start': last_end,
+                    'end': note_end,
+                    'type': 'fixed',
+                    'pitch': current_pitch,
+                    'velocity': current_velocity,
+                    'pan': current_pan,
+                    'fcut': current_fcut,
+                    'fres': current_fres,
+                    'release': current_release
+                })
+
+            pos = note_start
+            while pos < note_end:
+                seg = get_segment_at_pos(segments, pos)
+                if seg is None:
+                    break
+
+                if seg['type'] == 'fixed':
+                    pitch = seg['pitch']
+                    velocity = seg['velocity']
+                    pan = seg['pan']
+                    fcut = seg['fcut']
+                    fres = seg['fres']
+                    release = seg['release']
+                else:
+                    ratio = (pos - seg['start']) / (seg['end'] - seg['start'])
+                    pitch = interpolate(seg['start_pitch'], seg['end_pitch'], ratio)
+                    velocity = interpolate(seg['start_velocity'], seg['end_velocity'], ratio)
+                    pan = interpolate(seg['start_pan'], seg['end_pan'], ratio)
+                    fcut = interpolate(seg['start_fcut'], seg['end_fcut'], ratio)
+                    fres = interpolate(seg['start_fres'], seg['end_fres'], ratio)
+                    release = interpolate(seg['start_release'], seg['end_release'], ratio)
+
+                freq = base_freq * math.pow(2, (pitch - 69) / 12.0)
+                period_ticks = max(1, int(ppq * bpm / 60.0 / freq))
+
+                pulse_end = pos + period_ticks
+                if pulse_end > note_end:
+                    break
+
+                pulse = flp.Note()
+                pulse.time = pos
+                if one_tick_mode:
+                    pulse.length = 1
+                else:
+                    pulse.length = period_ticks
+                pulse.number = note.number
+                pulse.velocity = velocity
+                pulse.pan = pan
+                pulse.fcut = fcut
+                pulse.fres = fres
+                pulse.release = release
+
+                if hasattr(note, 'color'):
+                    pulse.color = note.color
+                if hasattr(note, 'channel'):
+                    pulse.channel = note.channel
+
+                new_notes.append(pulse)
+                pos += period_ticks
+
+    flp.score.clearNotes(True)
+    for note in new_notes:
+        flp.score.addNote(note)
+
+def calculate_pitch(note, base_freq, transpose):
+    pitch = note.number
+    pitch += transpose * 12
+    if hasattr(note, 'pitchofs'):
+        pitch += note.pitchofs / 10
+    return pitch
+
+def interpolate(start, end, ratio): 
+    return start + (end - start) * ratio
