@@ -27,7 +27,7 @@ Sample projects: death by amen(FL).zip, death by amen(REAPER).zip and [more](htt
 4. Run from Action List or assign to a shortcut
 
 ### For FL Studio
-1. Copy `midi_osc.py` to your FL Studio piano roll scripts folder
+1. Copy `midi_osc.pyscript` to your FL Studio piano roll scripts folder
 2. Access via piano roll: Tools > Scripts > midi_osc
 
 HINT:  Higher pitches and accuracy require higher PPQ & BPM values.
