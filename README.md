@@ -20,6 +20,8 @@ Sample projects: death by amen(FL).zip, death by amen(REAPER).zip and [more](htt
 
 ## Usage
 
+**HINT:  Higher pitches and accuracy require higher PPQ & BPM values.**
+
 ### For REAPER
 1. Copy `midi_osc.lua` to your REAPER scripts folder
 2. In REAPER, open Action List (Shift+?)
@@ -30,7 +32,6 @@ Sample projects: death by amen(FL).zip, death by amen(REAPER).zip and [more](htt
 1. Copy `midi_osc.pyscript` to your FL Studio piano roll scripts folder
 2. Access via piano roll: Tools > Scripts > midi_osc
 
-HINT:  Higher pitches and accuracy require higher PPQ & BPM values.
 
 You can refer to the article below for more information.
 
