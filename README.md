@@ -16,7 +16,7 @@ midi_osc.pyscript in FL Studio：[.flp demo](https://www.youtube.com/watch?v=Fps
 
 ![midi_osc for REAPER](Image/midi_osc(FL).png)
 
-Sample projects: death by amen(FL).zip, death by amen(REAPER).zip and [more](https://drive.google.com/drive/folders/1oZOI3hOdlEFAAyvg7UqqHOhteqQck4-X?usp=drive_link)
+Sample projects [here](https://github.com/Nu-E01/midi_osc/tree/main/Sample%20Projects)
 
 ## Usage
 
