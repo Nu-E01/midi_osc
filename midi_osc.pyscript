@@ -1,5 +1,3 @@
-# Bilibili @dumb_cmd
-
 import flpianoroll as flp
 import math
 
