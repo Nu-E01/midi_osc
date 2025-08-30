@@ -4,26 +4,25 @@ import flpianoroll as flp
 import math
 
 def createDialog():
-    ppq_notice = "目前 PPQ 为 %d（建议设置较高的 PPQ/BPM 以提高音准）" % flp.score.PPQ
+    ppq_notice = "Current PPQ: %d (increase PPQ & BPM for higher accuracy)" % flp.score.PPQ
     form = flp.ScriptDialog(
         "midi_osc",
-        "灵感来自 death by amen - Virtual Riot\n"
-        "用于生成高频MIDI音符，以模拟振荡器的部分功能\n"
-        "继承大部分的音符属性，支持简单的滑音(Slide)\n"
+        "Inspired by death by amen - Virtual Riot\n"
+        "Generates high-frequency MIDI notes to emulate oscillator functionality\n"
+        "Retains most note properties and supports slide notes\n"
         + ppq_notice
-         
     )
-    form.AddInputKnobInt("速度(BPM)", 120, 1, 522)
-    form.AddInputKnobInt("标准音高(Hz)", 440, 300, 600)
-    form.AddInputKnobInt("移调(八度)", 0, -6, 6)
+    form.AddInputKnobInt("Tempo(BPM)", 120, 1, 522)
+    form.AddInputKnobInt("A4(Hz)", 440, 300, 600)
+    form.AddInputKnobInt("Transpose(Oct)", 0, -6, 6)
     form.AddInputCheckbox("1tick", False)
     
     return form
 
 def apply(form):
-    bpm = form.GetInputValue("速度(BPM)") or 120
-    base_freq = form.GetInputValue("标准音高(Hz)") or 440
-    transpose = form.GetInputValue("移调(八度)") or 0
+    bpm = form.GetInputValue("Tempo(BPM)") or 120
+    base_freq = form.GetInputValue("A4(Hz)") or 440
+    transpose = form.GetInputValue("Transpose(Octaves)") or 0
     one_tick_mode = form.GetInputValue("1tick") or False
     ppq = flp.score.PPQ
 
