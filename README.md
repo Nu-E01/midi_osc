@@ -29,7 +29,7 @@ Sample projects [here](https://github.com/Nu-E01/midi_osc/tree/main/Sample%20Pro
 4. Run from Action List or assign to a shortcut
 
 ### For FL Studio
-1. Copy `midi_osc.pyscript` to your FL Studio piano roll scripts folder
+1. Copy `midi_osc.pyscript` to your FL Studio Piano roll scripts folder
 2. Access via piano roll: Tools > Scripts > midi_osc
 
 
