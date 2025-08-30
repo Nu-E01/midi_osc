@@ -155,13 +155,13 @@ local function midi_ProcessItem(item, octave_offset, suffix)
                 
                 if pulseEndTime > noteEndTime then break end
                 
-				-- PPQ setting
+        -- PPQ setting
                 local pulseStartPPQ = reaper.MIDI_GetPPQPosFromProjTime(new_take, noteStartTime)
                 local pulseEndPPQ = reaper.MIDI_GetPPQPosFromProjTime(new_take, pulseEndTime)
                 local periodPPQ = pulseEndPPQ - pulseStartPPQ
                 periodPPQ = math.max(1, periodPPQ) 
-				
-				-- Insert Notes
+        
+        -- Insert Notes
                 if periodPPQ >= 1 then
                     reaper.MIDI_InsertNote(new_take, false, false, 
                                         pulseStartPPQ, pulseEndPPQ, 
@@ -427,11 +427,11 @@ end
 local function showMissingImguiDialog()
     local title = "Missing Dependency"
     local msg = "This script requires ReaImGui to run.\n\n" ..
-                "Would you like to open the installation tutorial in your browser?"
+                "Would you like to install it in the next window?"
     
     local result = reaper.ShowMessageBox(msg, title, 4) -- 4 = Yes/No buttons
     if result == 6 then -- 6 = Yes
-        reaper.CF_ShellExecute("https://club.reaget.com/t/topic/1795")
+        reaper.ReaPack_BrowsePackages("ReaImGui: ReaScript binding for Dear ImGui")
     end
 end
 
