@@ -17,7 +17,7 @@ USAGE:
 4. Click "Generate"
 
 AUTHOR: @dumb_cmd
-REQUIRES: REAPER with ImGui support
+REQUIRES: REAPER v6.0+ with ImGui support
 ]]--
 
 ------------------------------------------
