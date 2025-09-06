@@ -1,4 +1,5 @@
 name: Bug Report
+title: "[Bug] "
 description: File a bug report to help us improve.
 labels:
   - bug
@@ -72,3 +73,4 @@ body:
         - label: I have searched all existing issues and confirmed that this is not a duplicate.
 
           required: true
+
