@@ -1,9 +1,9 @@
-# yamllint disable-file rule:line-length
 name: Bug Report
 description: File a bug report to help us improve.
 labels:
   - bug
 body:
+
   - type: input
     id: system-information
     attributes:
@@ -12,26 +12,25 @@ body:
       placeholder: ex. Windows 10 32-bit
     validations:
       required: true
-      
-  - type: dropdown
-    id: daw-type
-    attributes:
-      label: What DAW are you seeing the problem on?
-      multiple: false
-      options:
-        - REAPER
-        - FL Studio
-    validations:
-      required: true
-      
+
   - type: input
     id: daw-version
     attributes:
-      label: Version
+      label: DAW Version
       description: |
-        Please specify the version of your DAW:
-        - For REAPER: ex. v6.66
-        - For FL Studio: ex. v24.2.2 [Build 4597]
+        ex.
+        - REAPER v6.66
+        - FL Studio v24.2.2 [Build 4597]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: script-version
+    attributes:
+      label: Script Version
+      multiple: false
+      options:
+        - 1.0.0
     validations:
       required: true
   
@@ -71,4 +70,5 @@ body:
       label: Please search the issue tracker for existing bug reports before submitting your own.
       options:
         - label: I have searched all existing issues and confirmed that this is not a duplicate.
+
           required: true
