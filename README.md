@@ -35,6 +35,7 @@ Sample projects [here](https://github.com/Nu-E01/midi_osc/tree/main/Sample%20Pro
 3. In REAPER, open Action List (Shift+?)
 4. Click "New action" → "Load ReaScript" → select `midi_osc.lua`
 5. Run from Action List or assign to a shortcut
+6. Select MIDI item(s), adjust settings and then click the "Generate" button
 
 ### For FL Studio
 1. Copy `midi_osc.pyscript` to your FL Studio Piano roll scripts folder
