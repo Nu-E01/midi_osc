@@ -1,0 +1,35 @@
+name: Feature Request
+description: Suggestions for new features or improvements
+labels: [ "enhancement" ]
+title: "[FR] "
+body:
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: No one has submitted a similar or identical feature request before.
+          required: true
+        - label: I am using the latest version.
+          required: true
+
+  - type: textarea
+    id: desc
+    attributes:
+      label: Feature Description
+      description: Please provide a clear description of the requested feature.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: If you have any ideas or suggestions on how this feature could be implemented, please share them here.
+
+  - type: textarea
+    id: addition
+    attributes:
+      label: Additional Context
+      description: Mention any plugins or projects that already implement this or a similar feature.
