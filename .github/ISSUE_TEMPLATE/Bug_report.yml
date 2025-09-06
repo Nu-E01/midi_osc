@@ -2,7 +2,7 @@ name: Bug Report
 description: File a bug report to help us improve.
 labels:
   - bug
-title: "[FR] "
+title: "[Bug] "
 body:
 
   - type: input
@@ -73,5 +73,6 @@ body:
         - label: I have searched all existing issues and confirmed that this is not a duplicate.
 
           required: true
+
 
 
