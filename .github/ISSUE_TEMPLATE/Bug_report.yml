@@ -1,0 +1,74 @@
+# yamllint disable-file rule:line-length
+name: Bug Report
+description: File a bug report to help us improve.
+labels:
+  - bug
+body:
+  - type: input
+    id: system-information
+    attributes:
+      label: System Information
+      description: The operating system you use to run the script.
+      placeholder: ex. Windows 10 32-bit
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: daw-type
+    attributes:
+      label: What DAW are you seeing the problem on?
+      multiple: false
+      options:
+        - REAPER
+        - FL Studio
+    validations:
+      required: true
+      
+  - type: input
+    id: daw-version
+    attributes:
+      label: Version
+      description: |
+        Please specify the version of your DAW:
+        - For REAPER: ex. v6.66
+        - For FL Studio: ex. v24.2.2 [Build 4597]
+    validations:
+      required: true
+  
+  - type: textarea
+    id: bug-summary
+    attributes:
+      label: Bug Summary
+      description: Briefly describe the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behaviour
+    attributes:
+      label: Expected Behaviour
+      description: Describe what should have happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps To Reproduce
+      description: Describe the minimum set of steps required to reproduce this bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: supporting-files
+    attributes:
+      label: Screenshots / Minimum Reproducible Project
+      description: Upload any screenshots or reproducible projects showing the bug in action if necessary.
+  
+  - type: checkboxes
+    id: search-for-existing
+    attributes:
+      label: Please search the issue tracker for existing bug reports before submitting your own.
+      options:
+        - label: I have searched all existing issues and confirmed that this is not a duplicate.
+          required: true
