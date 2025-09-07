@@ -20,7 +20,7 @@ def createDialog():
 def apply(form):
     bpm = form.GetInputValue("Tempo(BPM)") or 120
     base_freq = form.GetInputValue("A4(Hz)") or 440
-    transpose = form.GetInputValue("Transpose(Octaves)") or 0
+    transpose = form.GetInputValue("Transpose(Oct)") or 0
     one_tick_mode = form.GetInputValue("1tick") or False
     ppq = flp.score.PPQ
 
